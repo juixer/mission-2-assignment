@@ -1,5 +1,5 @@
 import { productRoute } from "./modules/product/product.route";
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { orderRoute } from "./modules/order/order.route";
 const app: Application = express();
@@ -17,14 +17,14 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.all("*", (req: Request, res: Response, next: NextFunction) => {
+app.all("*", (req: Request, res: Response) => {
   res.status(404).json({
     success: false,
     message: `Route not found`,
   });
 });
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+app.use((error: unknown, req: Request, res: Response) => {
   if (error) {
     res.status(400).json({
       success: false,

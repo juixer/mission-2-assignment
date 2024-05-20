@@ -93,7 +93,7 @@ const deleteProductById = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Product deleted successfully!",
-      data: null,
+      data: result,
     });
   } catch (error) {
     res.status(500).json({
@@ -108,7 +108,7 @@ const deleteProductById = async (req: Request, res: Response) => {
 const searchProductByText = async (req: Request, res: Response) => {
   try {
     const searchTerm = req.query.searchTerm as string;
-    const result = await productService.searchProductInDB(searchTerm)
+    const result = await productService.searchProductInDB(searchTerm);
     res.status(200).json({
       success: true,
       message: `Products matching search term ${searchTerm} fetched successfully!`,
@@ -129,5 +129,5 @@ export const productController = {
   getProductById,
   updateProductById,
   deleteProductById,
-  searchProductByText
+  searchProductByText,
 };

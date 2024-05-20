@@ -3,6 +3,8 @@
 import { Request, Response } from "express";
 import { orderService } from "./order.service";
 import { ProductModel } from "../product/product.model";
+import { Product } from "../product/product.interface";
+
 
 // create a new order
 const createOrder = async (req: Request, res: Response) => {
@@ -10,7 +12,7 @@ const createOrder = async (req: Request, res: Response) => {
     const order = req.body;
     const productId = order.productId;
 
-    const { inventory }: any = await ProductModel.findById(productId);
+    const { inventory } = await ProductModel.findById(productId) as Product;
 
     if (order.quantity > inventory.quantity) {
       return res.status(404).json({
