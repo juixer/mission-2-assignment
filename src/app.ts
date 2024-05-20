@@ -1,7 +1,6 @@
 import { productRoute } from "./modules/product/product.route";
 import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import { error } from "console";
 const app: Application = express();
 
 // parser

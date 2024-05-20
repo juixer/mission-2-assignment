@@ -104,10 +104,30 @@ const deleteProductById = async (req: Request, res: Response) => {
   }
 };
 
+// search product by text
+const searchProductByText = async (req: Request, res: Response) => {
+  try {
+    const searchTerm = req.query.searchTerm as string;
+    const result = await productService.searchProductInDB(searchTerm)
+    res.status(200).json({
+      success: true,
+      message: `Products matching search term ${searchTerm} fetched successfully!`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      data: error,
+    });
+  }
+};
+
 export const productController = {
   createProduct,
   getProducts,
   getProductById,
   updateProductById,
   deleteProductById,
+  searchProductByText
 };
