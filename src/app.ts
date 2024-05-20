@@ -1,7 +1,16 @@
-import express from "express";
+import { productRoute } from "./modules/product/product.route";
+import express, { Request, Response } from "express";
+import cors from 'cors';
 const app = express();
 
-app.get("/", (req, res) => {
+// parser
+app.use(express.json());
+app.use(cors());
+
+// routing
+app.use('/api', productRoute)
+
+app.get("/", (req : Request, res : Response) => {
   res.send("Hello World!");
 });
 
