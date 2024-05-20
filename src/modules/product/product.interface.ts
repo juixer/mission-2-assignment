@@ -10,6 +10,6 @@ export interface Product {
     }[];
     inventory : {
         quantity : number;
-        inStock?: boolean;
+        inStock: boolean;
     }
 }

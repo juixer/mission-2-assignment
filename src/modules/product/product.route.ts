@@ -1,11 +1,9 @@
 import express, { Request, Response } from 'express';
+import { productController } from './product.controller';
 
 const route = express.Router();
 
-route.get('/products', (req : Request, res : Response) => {
-    
-    res.send('products')
-})
+route.post('/products', productController.createProduct)
 
 
 export const productRoute = route;

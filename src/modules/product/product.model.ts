@@ -27,6 +27,7 @@ const productSchema = new Schema<Product>({
     inStock: {
       type: Boolean,
       default: true,
+      required: true,
     },
   },
 });
