@@ -65,6 +65,7 @@ const getAllOrder = async (req: Request, res: Response) => {
 const getOrdersByEmail = async (req: Request, res: Response) => {
   try {
     const email = req.query.email as string;
+
     const result = await orderService.getOrdersByEmailFromDB(email);
     res.status(200).json({
       success: true,

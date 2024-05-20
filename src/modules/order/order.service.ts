@@ -18,11 +18,11 @@ const createOrderIntoDB = async (order: Order) => {
     $inc: { "inventory.quantity": -orderQuantity },
   });
 
-    if (updateProduct?.inventory.quantity === 1) {
-      await ProductModel.findByIdAndUpdate(id, {
-        $set: { "inventory.inStock": false },
-      });
-    }
+  if (updateProduct?.inventory.quantity === 1) {
+    await ProductModel.findByIdAndUpdate(id, {
+      $set: { "inventory.inStock": false },
+    });
+  }
 
   const result = await OrderModel.create(order);
   return result;
@@ -36,7 +36,21 @@ const getAllOrderFromDB = async () => {
 
 // get orders by email
 const getOrdersByEmailFromDB = async (email: string) => {
-  const result = await OrderModel.find({ email: email });
+  const result = await OrderModel.aggregate([
+    { $match: { email: email} },
+    {
+      $group: {
+        _id: "$email",
+        orders: {
+          $push: {
+            productId: "$productId",
+            price: "$price",
+            quantity: "$quantity",
+          },
+        },
+      },
+    },
+  ]);
   return result;
 };
 
