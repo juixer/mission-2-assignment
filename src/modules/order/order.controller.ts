@@ -12,6 +12,13 @@ const createOrder = async (req: Request, res: Response) => {
 
     const { inventory }: any = await ProductModel.findById(productId);
 
+    if (order.quantity > inventory.quantity) {
+      return res.status(404).json({
+        success: false,
+        message: "Insufficient quantity available in inventory",
+      });
+    }
+
     if (inventory.inStock === false) {
       return res.status(400).json({
         success: false,
@@ -74,5 +81,5 @@ const getOrdersByEmail = async (req: Request, res: Response) => {
 export const orderController = {
   createOrder,
   getAllOrder,
-  getOrdersByEmail
+  getOrdersByEmail,
 };
