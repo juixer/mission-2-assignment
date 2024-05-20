@@ -1,6 +1,7 @@
 import { productRoute } from "./modules/product/product.route";
 import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
+import { orderRoute } from "./modules/order/order.route";
 const app: Application = express();
 
 // parser
@@ -9,6 +10,7 @@ app.use(cors());
 
 // routing
 app.use("/api/products", productRoute);
+app.use("/api/orders", orderRoute)
 
 app.get("/", (req: Request, res: Response) => {
     
