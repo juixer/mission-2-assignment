@@ -6,6 +6,12 @@ const addProductIntoDB = async (product: Product) => {
   return result;
 };
 
+const getProductsFromDB = async () => {
+  const result = await ProductModel.find();
+  return result;
+};
+
 export const productService = {
-    addProductIntoDB
+  addProductIntoDB,
+  getProductsFromDB,
 };
