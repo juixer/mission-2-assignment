@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { orderService } from "./order.service";
 import { ProductModel } from "../product/product.model";
 
+// create a new order
 const createOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
@@ -33,6 +34,7 @@ const createOrder = async (req: Request, res: Response) => {
   }
 };
 
+// get all orders
 const getAllOrder = async (req: Request, res: Response) => {
   try {
     const result = await orderService.getAllOrderFromDB();
@@ -50,7 +52,27 @@ const getAllOrder = async (req: Request, res: Response) => {
   }
 };
 
+// get orders by email
+const getOrdersByEmail = async (req: Request, res: Response) => {
+  try {
+    const email = req.query.email as string;
+    const result = await orderService.getOrdersByEmailFromDB(email);
+    res.status(200).json({
+      success: true,
+      message: "Orders fetched successfully for user email!!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      data: error,
+    });
+  }
+};
+
 export const orderController = {
   createOrder,
   getAllOrder,
+  getOrdersByEmail
 };

@@ -4,6 +4,7 @@ import { ProductModel } from "../product/product.model";
 import { Order } from "./order.interface";
 import { OrderModel } from "./order.model";
 
+// create order into db
 const createOrderIntoDB = async (order: Order) => {
   const id = order.productId;
   const orderQuantity = order.quantity;
@@ -27,12 +28,20 @@ const createOrderIntoDB = async (order: Order) => {
   return result;
 };
 
+// get all orders from db
 const getAllOrderFromDB = async () => {
   const result = await OrderModel.find();
   return result;
 };
 
+// get orders by email
+const getOrdersByEmailFromDB = async (email : string) => {
+    const result = await OrderModel.find({email: email});
+    return result;
+}
+
 export const orderService = {
   createOrderIntoDB,
   getAllOrderFromDB,
+  getOrdersByEmailFromDB
 };
