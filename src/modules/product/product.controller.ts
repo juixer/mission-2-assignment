@@ -59,8 +59,55 @@ const getProductById = async (req: Request, res: Response) => {
     });
   }
 };
+
+// update product by id
+const updateProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const updateData = req.body;
+
+    const result = await productService.updateProductInDB(
+      productId,
+      updateData
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      data: error,
+    });
+  }
+};
+
+// delete product by id
+const deleteProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const result = await productService.deleteProductFromDB(productId);
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully!",
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      data: error,
+    });
+  }
+};
+
 export const productController = {
   createProduct,
   getProducts,
-  getProductById
+  getProductById,
+  updateProductById,
+  deleteProductById,
 };
