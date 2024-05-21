@@ -8,21 +8,21 @@ import { OrderModel } from "./order.model";
 const createOrderIntoDB = async (order: Order) => {
   const id = order.productId;
   const orderQuantity = order.quantity;
+  order.price = order.price * orderQuantity;
 
-  const { price }: any = await ProductModel.findById(id);
+  const { inventory }: any = await ProductModel.findById(id);
 
-  const totalPrice = price * orderQuantity;
-  order.price = totalPrice;
+  const quantity = inventory.quantity - orderQuantity;
+  const inStock = quantity > 0;
 
-  const updateProduct = await ProductModel.findByIdAndUpdate(id, {
-    $inc: { "inventory.quantity": -orderQuantity },
-  });
-
-  if (updateProduct?.inventory.quantity === 1) {
-    await ProductModel.findByIdAndUpdate(id, {
-      $set: { "inventory.inStock": false },
-    });
-  }
+  await ProductModel.findByIdAndUpdate(
+    id,
+    {
+      "inventory.quantity": quantity,
+      "inventory.inStock": inStock,
+    },
+    { new: true }
+  );
 
   const result = await OrderModel.create(order);
   return result;
@@ -37,7 +37,7 @@ const getAllOrderFromDB = async () => {
 // get orders by email
 const getOrdersByEmailFromDB = async (email: string) => {
   const result = await OrderModel.aggregate([
-    { $match: { email: email} },
+    { $match: { email: email } },
     {
       $group: {
         _id: "$email",
