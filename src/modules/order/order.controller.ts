@@ -4,13 +4,24 @@ import { Request, Response } from "express";
 import { orderService } from "./order.service";
 import { ProductModel } from "../product/product.model";
 import { Product } from "../product/product.interface";
+import orderValidationSchema from "./order.validation";
 
 // create a new order
 const createOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
-    const productId = order.productId;
 
+    const { error, value } = orderValidationSchema.validate(order);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: "something went wrong",
+        error: error.details,
+      });
+    }
+
+    const productId = value.productId;
     const product = (await ProductModel.findById(productId)) as Product;
 
     if (!product) {
@@ -21,7 +32,7 @@ const createOrder = async (req: Request, res: Response) => {
     }
 
     const { inventory } = product;
-    if (order.quantity > inventory.quantity) {
+    if (value.quantity > inventory.quantity) {
       return res.status(404).json({
         success: false,
         message: "Insufficient quantity available in inventory",
@@ -35,7 +46,7 @@ const createOrder = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await orderService.createOrderIntoDB(order);
+    const result = await orderService.createOrderIntoDB(value);
     res.status(200).json({
       success: true,
       message: "Order created successfully!",
