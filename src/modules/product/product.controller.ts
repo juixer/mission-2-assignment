@@ -94,7 +94,7 @@ const updateProductById = async (req: Request, res: Response) => {
     const updateData = req.body;
 
     const { value, error } =
-      productValidate.productUpdateValidationSchema.validate(updateData);
+      productValidate.productCreateValidationSchema.validate(updateData);
     if (error) {
       return res.status(500).json({
         success: false,
