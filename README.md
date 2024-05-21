@@ -9,7 +9,11 @@
 ## Usage
 To run the application locally, use the following command:
     
+    npm run start
+    or
     npm run start:prod
+    (typescript)
+    npm run start:dev
 
 This will start the application on http://localhost:5000
 

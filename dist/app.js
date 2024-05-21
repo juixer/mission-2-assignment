@@ -18,7 +18,7 @@ app.use("/api/products", product_route_1.productRoute);
 app.use("/api/orders", order_route_1.orderRoute);
 // default route
 app.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.send("Welcome to E-commerce Project!");
 });
 // Global route
 app.all("*", (req, res) => {

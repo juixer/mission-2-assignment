@@ -17,7 +17,7 @@ app.use("/api/orders", orderRoute);
 
 // default route
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.send("Welcome to E-commerce Project!");
 });
 
 // Global route
