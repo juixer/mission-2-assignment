@@ -26,6 +26,12 @@ const createProduct = async (req: Request, res: Response) => {
 const getProducts = async (req: Request, res: Response) => {
   try {
     const result = await productService.getProductsFromDB();
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Products not found",
+      });
+    }
     res.status(200).json({
       screen: true,
       message: "Products fetched successfully!",
@@ -46,6 +52,12 @@ const getProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
     const result = await productService.getSingleProductFromDB(productId);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Product fetched successfully!",

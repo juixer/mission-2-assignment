@@ -5,14 +5,13 @@ import { orderService } from "./order.service";
 import { ProductModel } from "../product/product.model";
 import { Product } from "../product/product.interface";
 
-
 // create a new order
 const createOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
     const productId = order.productId;
 
-    const { inventory } = await ProductModel.findById(productId) as Product;
+    const { inventory } = (await ProductModel.findById(productId)) as Product;
 
     if (order.quantity > inventory.quantity) {
       return res.status(404).json({
@@ -47,6 +46,12 @@ const createOrder = async (req: Request, res: Response) => {
 const getAllOrder = async (req: Request, res: Response) => {
   try {
     const result = await orderService.getAllOrderFromDB();
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Orders not found",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Orders fetched successfully!",
@@ -67,6 +72,12 @@ const getOrdersByEmail = async (req: Request, res: Response) => {
     const email = req.query.email as string;
 
     const result = await orderService.getOrdersByEmailFromDB(email);
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Orders fetched successfully for user email!!",
