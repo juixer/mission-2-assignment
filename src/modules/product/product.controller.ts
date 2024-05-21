@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { productService } from "./product.service";
 import { productValidate } from "./product.validation";
+import { ProductModel } from "./product.model";
 
 // create a new product
 
@@ -17,6 +18,18 @@ const createProduct = async (req: Request, res: Response) => {
         success: false,
         message: "something went wrong",
         error: error.details,
+      });
+    }
+
+    const productName = value.name;
+    const productFromDb = await ProductModel.find({
+      name: productName,
+    });
+
+    if (productFromDb) {
+      return res.status(409).json({
+        success: false,
+        message: "product already exists",
       });
     }
 
