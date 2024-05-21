@@ -3,7 +3,7 @@ import { productController } from "./product.controller";
 
 const route = express.Router();
 
-route.post("/create-product", productController.createProduct);
+route.post("/", productController.createProduct);
 route.get("/", (req: Request, res: Response) => {
   if (req.query.searchTerm) {
     productController.searchProductByText(req, res);

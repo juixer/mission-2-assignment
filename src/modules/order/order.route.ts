@@ -11,6 +11,6 @@ route.get("/", (req: Request, res: Response) => {
   }
 });
 
-route.post("/create-order", orderController.createOrder);
+route.post("/", orderController.createOrder);
 
 export const orderRoute = route;

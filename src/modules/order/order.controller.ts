@@ -11,8 +11,16 @@ const createOrder = async (req: Request, res: Response) => {
     const order = req.body;
     const productId = order.productId;
 
-    const { inventory } = (await ProductModel.findById(productId)) as Product;
+    const product = (await ProductModel.findById(productId)) as Product;
 
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    const { inventory } = product;
     if (order.quantity > inventory.quantity) {
       return res.status(404).json({
         success: false,
@@ -72,12 +80,6 @@ const getOrdersByEmail = async (req: Request, res: Response) => {
     const email = req.query.email as string;
 
     const result = await orderService.getOrdersByEmailFromDB(email);
-    if (result.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
     res.status(200).json({
       success: true,
       message: "Orders fetched successfully for user email!!",
