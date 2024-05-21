@@ -21,7 +21,7 @@ const getSingleProductFromDB = async (productId: string) => {
 };
 
 // update product in DB
-const updateProductInDB = async (productId: string, updateData: any) => {
+const updateProductInDB = async (productId: string, updateData: Product) => {
   const result = await ProductModel.findByIdAndUpdate(
     productId,
     { $set: updateData },

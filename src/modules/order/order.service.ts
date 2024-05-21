@@ -1,5 +1,6 @@
 // create order into db
 
+import { Product } from "../product/product.interface";
 import { ProductModel } from "../product/product.model";
 import { Order } from "./order.interface";
 import { OrderModel } from "./order.model";
@@ -10,8 +11,9 @@ const createOrderIntoDB = async (order: Order) => {
   const orderQuantity = order.quantity;
   order.price = order.price * orderQuantity;
 
-  const { inventory }: any = await ProductModel.findById(id);
+  const product = (await ProductModel.findById(id)) as Product;
 
+  const { inventory } = product;
   const quantity = inventory.quantity - orderQuantity;
   const inStock = quantity > 0;
 

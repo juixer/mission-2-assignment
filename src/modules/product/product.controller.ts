@@ -1,12 +1,24 @@
 import { Request, Response } from "express";
 import { productService } from "./product.service";
+import productValidationSchema from "./product.validation";
 
 // create a new product
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
-    const result = await productService.addProductIntoDB(product);
+
+    const { value, error } = productValidationSchema.validate(product);
+
+    if (error) {
+     return res.status(500).json({
+        success: false,
+        message: "something went wrong",
+        error: error.details,
+      });
+    }
+
+    const result = await productService.addProductIntoDB(value);
     res.status(200).json({
       screen: true,
       message: "Product created successfully!",
@@ -16,7 +28,7 @@ const createProduct = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
@@ -41,7 +53,7 @@ const getProducts = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
@@ -67,7 +79,7 @@ const getProductById = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
@@ -92,7 +104,7 @@ const updateProductById = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
@@ -111,7 +123,7 @@ const deleteProductById = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
@@ -130,7 +142,7 @@ const searchProductByText = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "something went wrong",
-      data: error,
+      error,
     });
   }
 };
