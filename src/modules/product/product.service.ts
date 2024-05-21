@@ -39,16 +39,17 @@ const deleteProductFromDB = async (productId: string) => {
 // search product in DB
 
 const searchProductInDB = async (searchTerm: string) => {
-    const regex = new RegExp(searchTerm, "i");
-    const result = await ProductModel.find({
-        $or:[
-            {name: {$regex:regex}},
-            {description: {$regex:regex}},
-            {category: {$regex:regex}},
-        ]
-    });
-    return result;
-  };
+  const regex = new RegExp(searchTerm, "i");
+  const result = await ProductModel.find({
+    $or: [
+      { name: { $regex: regex } },
+      { description: { $regex: regex } },
+      { category: { $regex: regex } },
+      { tags: { $regex: regex } },
+    ],
+  });
+  return result;
+};
 
 export const productService = {
   addProductIntoDB,
