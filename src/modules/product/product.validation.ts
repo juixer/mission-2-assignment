@@ -1,6 +1,7 @@
-import Joi from 'joi'
+import Joi from "joi";
 
-const productValidationSchema = Joi.object({
+// create validate schema
+const productCreateValidationSchema = Joi.object({
   name: Joi.string().max(75).required().messages({
     "any.required": "Please provide a product name",
     "string.empty": "Please provide a product name",
@@ -62,4 +63,56 @@ const productValidationSchema = Joi.object({
     }),
 });
 
-export default productValidationSchema;
+const productUpdateValidationSchema = Joi.object({
+  name: Joi.string().max(75).messages({
+    "string.empty": "Please provide a product name",
+    "string.max": "Product name should not exceed 75 characters",
+  }),
+  description: Joi.string().max(500).messages({
+    "string.empty": "Please provide a short description",
+    "string.max": "Description should not exceed 500 characters",
+  }),
+  price: Joi.number().messages({
+    "number.base": "Price must be a number",
+    "number.empty": "Please provide the price",
+  }),
+  category: Joi.string().max(75).messages({
+    "string.empty": "Please provide a category",
+    "string.max": "Category should not exceed 75 characters",
+  }),
+  tags: Joi.array().items(Joi.string()).messages({
+    "array.base": "Tags must be an array",
+    "array.empty": "Please provide product tags",
+  }),
+  variants: Joi.array()
+    .items(
+      Joi.object({
+        type: Joi.string().messages({
+          "string.empty": "Please provide variant type",
+        }),
+        value: Joi.string().messages({
+          "string.empty": "Please provide variant value",
+        }),
+      })
+    )
+    .messages({
+      "array.base": "Variants must be an array",
+      "array.empty": "Please provide at least one variant",
+    }),
+  inventory: Joi.object({
+    quantity: Joi.number().messages({
+      "number.base": "Quantity must be a number",
+      "number.empty": "Please provide product inventory quantity",
+    }),
+    inStock: Joi.boolean().default(true).messages({
+      "boolean.base": "Stock information must be boolean",
+    }),
+  }).messages({
+    "object.base": "Please provide inventory information",
+  }),
+});
+
+export const productValidate = {
+  productCreateValidationSchema,
+  productUpdateValidationSchema,
+};

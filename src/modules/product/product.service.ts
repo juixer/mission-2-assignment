@@ -22,6 +22,8 @@ const getSingleProductFromDB = async (productId: string) => {
 
 // update product in DB
 const updateProductInDB = async (productId: string, updateData: Product) => {
+
+  // updating product by using mongoose findByIdAndUpdate
   const result = await ProductModel.findByIdAndUpdate(
     productId,
     { $set: updateData },
@@ -39,6 +41,8 @@ const deleteProductFromDB = async (productId: string) => {
 // search product in DB
 
 const searchProductInDB = async (searchTerm: string) => {
+
+  // using mongodb regex to search for products
   const regex = new RegExp(searchTerm, "i");
   const result = await ProductModel.find({
     $or: [

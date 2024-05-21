@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { productService } from "./product.service";
-import productValidationSchema from "./product.validation";
+import { productValidate } from "./product.validation";
 
 // create a new product
 
@@ -8,10 +8,12 @@ const createProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
 
-    const { value, error } = productValidationSchema.validate(product);
+    // validating the product data by Joi
+    const { value, error } =
+      productValidate.productCreateValidationSchema.validate(product);
 
     if (error) {
-     return res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "something went wrong",
         error: error.details,
@@ -38,6 +40,7 @@ const createProduct = async (req: Request, res: Response) => {
 const getProducts = async (req: Request, res: Response) => {
   try {
     const result = await productService.getProductsFromDB();
+    // if result is empty it will show not found error
     if (result.length === 0) {
       return res.status(404).json({
         success: false,
@@ -90,10 +93,17 @@ const updateProductById = async (req: Request, res: Response) => {
     const productId = req.params.productId;
     const updateData = req.body;
 
-    const result = await productService.updateProductInDB(
-      productId,
-      updateData
-    );
+    const { value, error } =
+      productValidate.productUpdateValidationSchema.validate(updateData);
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: "something went wrong",
+        error: error.details,
+      });
+    }
+
+    const result = await productService.updateProductInDB(productId, value);
 
     res.status(200).json({
       success: true,

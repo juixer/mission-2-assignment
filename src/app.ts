@@ -9,14 +9,18 @@ app.use(express.json());
 app.use(cors());
 
 // routing
-app.use("/api/products", productRoute);
-app.use("/api/orders", orderRoute)
 
+// product routes
+app.use("/api/products", productRoute);
+// order routes
+app.use("/api/orders", orderRoute);
+
+// default route
 app.get("/", (req: Request, res: Response) => {
-    
   res.send("Hello World!");
 });
 
+// Global route
 app.all("*", (req: Request, res: Response) => {
   res.status(404).json({
     success: false,
@@ -24,6 +28,7 @@ app.all("*", (req: Request, res: Response) => {
   });
 });
 
+// error route
 app.use((error: unknown, req: Request, res: Response) => {
   if (error) {
     res.status(400).json({
