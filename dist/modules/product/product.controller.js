@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productController = void 0;
 const product_service_1 = require("./product.service");
 const product_validation_1 = require("./product.validation");
-const product_model_1 = require("./product.model");
 // create a new product
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,16 +23,6 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 success: false,
                 message: "something went wrong",
                 error: error.details,
-            });
-        }
-        const productName = value.name;
-        const productFromDb = yield product_model_1.ProductModel.find({
-            name: productName,
-        });
-        if (productFromDb) {
-            return res.status(409).json({
-                success: false,
-                message: "product already exists",
             });
         }
         const result = yield product_service_1.productService.addProductIntoDB(value);
@@ -106,7 +95,7 @@ const updateProductById = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const productId = req.params.productId;
         const updateData = req.body;
-        const { value, error } = product_validation_1.productValidate.productCreateValidationSchema.validate(updateData);
+        const { value, error } = product_validation_1.productValidate.productUpdateValidationSchema.validate(updateData);
         if (error) {
             return res.status(500).json({
                 success: false,

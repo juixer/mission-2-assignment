@@ -66,48 +66,51 @@ const productCreateValidationSchema = joi_1.default.object({
     }),
 });
 const productUpdateValidationSchema = joi_1.default.object({
-    name: joi_1.default.string().max(75).messages({
+    name: joi_1.default.string().max(75).optional().messages({
         "string.empty": "Please provide a product name",
         "string.max": "Product name should not exceed 75 characters",
     }),
-    description: joi_1.default.string().max(500).messages({
+    description: joi_1.default.string().max(500).optional().messages({
         "string.empty": "Please provide a short description",
         "string.max": "Description should not exceed 500 characters",
     }),
-    price: joi_1.default.number().messages({
+    price: joi_1.default.number().optional().messages({
         "number.base": "Price must be a number",
         "number.empty": "Please provide the price",
     }),
-    category: joi_1.default.string().max(75).messages({
+    category: joi_1.default.string().max(75).optional().messages({
         "string.empty": "Please provide a category",
         "string.max": "Category should not exceed 75 characters",
     }),
-    tags: joi_1.default.array().items(joi_1.default.string()).messages({
+    tags: joi_1.default.array().items(joi_1.default.string()).optional().messages({
         "array.base": "Tags must be an array",
         "array.empty": "Please provide product tags",
     }),
     variants: joi_1.default.array()
         .items(joi_1.default.object({
-        type: joi_1.default.string().messages({
+        type: joi_1.default.string().optional().messages({
             "string.empty": "Please provide variant type",
         }),
-        value: joi_1.default.string().messages({
+        value: joi_1.default.string().optional().messages({
             "string.empty": "Please provide variant value",
         }),
     }))
+        .optional()
         .messages({
         "array.base": "Variants must be an array",
         "array.empty": "Please provide at least one variant",
     }),
     inventory: joi_1.default.object({
-        quantity: joi_1.default.number().messages({
+        quantity: joi_1.default.number().optional().messages({
             "number.base": "Quantity must be a number",
             "number.empty": "Please provide product inventory quantity",
         }),
-        inStock: joi_1.default.boolean().default(true).messages({
+        inStock: joi_1.default.boolean().default(true).optional().messages({
             "boolean.base": "Stock information must be boolean",
         }),
-    }).messages({
+    })
+        .optional()
+        .messages({
         "object.base": "Please provide inventory information",
     }),
 });
